@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interactive Form Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Register</h2>
+
+  <form id="registerForm">
+    <label>Full Name: <br>
+      <input type="text" id="fullname" required>
+    </label>
+    <div class="error" id="nameError"></div>
+    <br>
+
+    <label>Email: <br>
+      <input type="email" id="email" required>
+    </label>
+    <div class="error" id="emailError"></div>
+    <br>
+
+    <label>Password: <br>
+      <input type="password" id="password" required minlength="6">
+    </label>
+    <input type="checkbox" id="togglePassword"> Show Password
+    <div class="error" id="passwordError"></div>
+    <br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div class="success" id="successMessage"></div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const togglePassword = document.getElementById('togglePassword');
+    
+    const nameInput = document.getElementById('fullname');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const successMessage = document.getElementById('successMessage');
+
+    // Show/hide password
+    togglePassword.addEventListener('change', () => {
+      passwordInput.type = togglePassword.checked ? 'text' : 'password';
+    });
+
+    // Form submission
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Reset messages
+      nameError.textContent = '';
+      emailError.textContent = '';
+      passwordError.textContent = '';
+      successMessage.textContent = '';
+
+      let isValid = true;
+
+      // Validate name
+      if (nameInput.value.trim() === '') {
+        nameError.textContent = 'Full name is required.';
+        isValid = false;
+      }
+
+      // Validate email
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!emailPattern.test(emailInput.value.trim())) {
+        emailError.textContent = 'Enter a valid email address.';
+        isValid = false;
+      }
+
+      // Validate password
+      if (passwordInput.value.length < 6) {
+        passwordError.textContent = 'Password must be at least 6 characters.';
+        isValid = false;
+      }
+
+      // If valid, show success message
+      if (isValid) {
+        successMessage.textContent = 'Form submitted successfully!';
+        form.reset();
+        passwordInput.type = 'password'; // reset to hidden
+      }
+    });
+  </script>
+
+</body>
+</html>
